@@ -104,6 +104,7 @@ initMale <- c(0,1)
 bigB <- 10000
 res <- EqulibTime(bigB,initFemale,initMale)
 
+#png("../assortative_mating/plots/timeToEqulib_mostExtreme.png")
 pdf("../assortative_mating/plots/timeToEqulib_mostExtreme.pdf")
 plot(1:10,res["NAm",1:10],type="l",col="blue",xlab="Generation",ylab="Proportion Ancestry",lwd=2)
 points(1:10,res["NAm1",1:10],type="l",col="green",lwd=2,lty=2)
@@ -111,6 +112,7 @@ legend("topright",c("Male","Female","Autosomal"),col=c("blue","green","magenta")
 abline(h=2/3,lwd=0.8,col="gray")
 abline(h=0.5,lwd=3,col="magenta",lty=3)
 dev.off()
+
 
 initFemale <- c(1,0)
 initMale <- c(0,1)

@@ -448,7 +448,83 @@ mtext("B", side=3, line=.75, adj=0, cex=1.3)
 dev.off()
 
 
+## make a png version of this
 
+## add plot titles 
+png("../frappe_auto_xChr_aswMXL_localAncest_withTitles.png")
+mxl <- get(load("asw_estimates_withLocal.RData"))
+par( mai=c(0.5, 0.65, 0.4, 0.05), mgp=c(2, 0.5, 0), tck=-0.03 ,mfrow=c(2,1))
+#par(mfrow=c(2,1))
+toPlOrd <- order(mxl[mxl$unrelated,"chrAll.local.CEU"])
+toPl1 <- mxl[mxl$unrelated,"chrAll.local.CEU"][toPlOrd]
+toPl2 <- mxl[mxl$unrelated,"chrAll.local.YRI"][toPlOrd]
+toPl3 <- mxl[mxl$unrelated,"chrAll.local.NAM"][toPlOrd]
+# autosomes
+auts <- rbind(toPl1,toPl2,toPl3)
+
+toPlOrd <- order(mxl[mxl$unrelated,"chrX.local.CEU"])
+toPl1 <- mxl[mxl$unrelated,"chrX.local.CEU"][toPlOrd]
+toPl2 <- mxl[mxl$unrelated,"chrX.local.YRI"][toPlOrd]
+toPl3 <- mxl[mxl$unrelated,"chrX.local.NAM"][toPlOrd]
+xc <- rbind(toPl1,toPl2,toPl3)
+toPl <- cbind(auts,xc)
+barplot(height=toPl,col=c("blue","red","green"),space=0,axes=F,border=NA,main="HapMap ASW Estimated Ancestry")
+axis(2)
+axis(1,at=c(26,79),lab=c("Autosomal","X Chromosome"),tick=F)
+mtext("A", side=3, line=0.75,adj=0,cex=1.3)
+
+
+mxl <- get(load("mxl_estimates_withLocal_v2.RData"))
+dim(mxl) # 87 150
+toPlOrd <- order(mxl[mxl$unrelated,"chrAll.local.CEU"])
+toPl1 <- mxl[mxl$unrelated,"chrAll.local.CEU"][toPlOrd]
+toPl2 <- mxl[mxl$unrelated,"chrAll.local.YRI"][toPlOrd]
+toPl3 <- mxl[mxl$unrelated,"chrAll.local.NAM"][toPlOrd]
+
+# autosomes
+auts <- rbind(toPl1,toPl2,toPl3)
+
+#xchr
+toPlOrd <- order(mxl[mxl$unrelated,"chrX.local.CEU"])
+toPl1 <- mxl[mxl$unrelated,"chrX.local.CEU"][toPlOrd]
+toPl2 <- mxl[mxl$unrelated,"chrX.local.YRI"][toPlOrd]
+toPl3 <- mxl[mxl$unrelated,"chrX.local.NAM"][toPlOrd]
+xc <- rbind(toPl1,toPl2,toPl3)
+
+toPl <- cbind(auts,xc)
+barplot(height=toPl,col=c("blue","red","green"),space=0,axes=F,border=NA,main="HapMap MXL Estimated Ancestry")
+legend("topleft",c("European","African","Native American"),lty=1,col=c("blue","red","green"),lwd=6,bg="white")
+axis(2)
+axis(1,at=c(22,67),lab=c("Autosomal","X Chromosome"),tick=F)
+mtext("B", side=3, line=.75, adj=0, cex=1.3)
+dev.off()
+
+## make plot of only MXL samples 
+pdf("../frappe_auto_xChr_MXL_localAncest_withTitles.pdf",width=11)
+mxl <- get(load("mxl_estimates_withLocal_v2.RData"))
+dim(mxl) # 87 150
+toPlOrd <- order(mxl[mxl$unrelated,"chrAll.local.CEU"])
+toPl1 <- mxl[mxl$unrelated,"chrAll.local.CEU"][toPlOrd]
+toPl2 <- mxl[mxl$unrelated,"chrAll.local.YRI"][toPlOrd]
+toPl3 <- mxl[mxl$unrelated,"chrAll.local.NAM"][toPlOrd]
+
+# autosomes
+auts <- rbind(toPl1,toPl2,toPl3)
+
+#xchr
+toPlOrd <- order(mxl[mxl$unrelated,"chrX.local.CEU"])
+toPl1 <- mxl[mxl$unrelated,"chrX.local.CEU"][toPlOrd]
+toPl2 <- mxl[mxl$unrelated,"chrX.local.YRI"][toPlOrd]
+toPl3 <- mxl[mxl$unrelated,"chrX.local.NAM"][toPlOrd]
+xc <- rbind(toPl1,toPl2,toPl3)
+
+toPl <- cbind(auts,xc)
+barplot(height=toPl,col=c("blue","red","green"),space=0,axes=F,border=NA,main="HapMap MXL Average Local Ancestry",
+        cex.main=1.3)
+legend("topleft",c("European","African","Native American"),lty=1,col=c("blue","red","green"),lwd=6,bg="white")
+axis(2,cex.axis=1.3)
+axis(1,at=c(25,82),lab=c("Autosomal","X Chromosome"),tick=F,cex.axis=1.3)
+dev.off()
 
 
 
@@ -673,7 +749,101 @@ rm(list=ls())
 
 
 #####
+# try a new method of combining p-values
+# want to estimate the correlation of our t-statistics
+
+library(corpcor)
+
+calc_combP <- function(dat){
+  sig2.i <- apply(dat,1,var) # this is individual level variance
+  
+  # get the w_cc',i for each individual i
+  m <- ncol(dat)
+  tmp1 <- expand.grid(1:m,1:m) # all pairwise combos of chrs
+  # remove rows where chrs are =
+  cc <- tmp1[,1]==tmp1[,2]
+  tmp1 <- tmp1[!cc,]
+  w <- rep(NA,nrow(dat))
+  for(i in 1:nrow(dat)){
+    abar <- mean(as.numeric(dat[i,]))
+    tmp2 <- cbind(as.numeric(dat[i,tmp1[,1]])-abar,as.numeric(dat[i,tmp1[,2]])-abar)
+    w[i] <- mean(tmp2[,1]*tmp2[,2])
+  }
+  # w_{cc',i} should be zero under the null, since we are adj for the mean ancestry w/in an individ
+  # this is relative to an individ, so there will be no correlation
+  # if this is relative to the population itself, there will be correlation
+  
+  # need a sig2_c for each pair of chromosomes
+  sig2.c <- rep(NA,ncol(dat))
+  tstat <- rep(NA,ncol(dat))
+  for(i in 1:m){
+    tmp <- dat[,-i]
+    pool <- apply(tmp,1,mean)
+    d <- dat[,i]-pool
+    dbar <- mean(d)
+    #  sdd <- sd(d)/sqrt(n)
+    #  tstat[i] <- dbar/sdd
+    
+    sig2.c[i] <- sum((d-dbar)^2)/(n*(n-1))
+    tstat[i] <- dbar/sqrt(sig2.c[i])
+    
+    #  tstat[i] <- t.test(nam[,i],pool,paired=TRUE)$statistic
+  }
+  
+  m <- ncol(dat)
+  sig.matrix <- diag(nrow=m,ncol=m)
+  for(i in 1:m){
+    for(j in 1:m){
+      denom <- n^2*sqrt(sig2.c[i])*sqrt(sig2.c[j])
+      sig.matrix[i,j] <- (1/denom)*sum((m/(m-1)^2)*(w-sig2.i))
+    }
+  }
+  diag(sig.matrix) <- 1
+  mean(sig.matrix[lower.tri(sig.matrix)]) # -0.054286
+  
+  # calculate new stat
+  (newstat <- tstat%*%solve(sig.matrix)%*%tstat) # 49.37731
+  return(pchisq(newstat,df=m,lower.tail=FALSE))
+}
+
+# calculate the pairwise correlation between ancestry estimates for each individual
+setwd("~/Documents/tim_stuff/r_code")
+mxl <- get(load("mxl_estimates_withLocal_v2.RData"))
+mxl <- mxl[mxl$unrelated,]
+dim(mxl) # 53 150
+
+n <- nrow(mxl)
+m <- ncol(mxl)
+
+nam <- mxl[,seq(from=81,to=147,by=3)]
+colnames(nam) # ok, good - chrs 1-22+X
+dim(nam) # 53 23
+
+(p <- calc_combP(nam)) # 0.001111169
+
+namAuto <- nam[,1:22]
+calc_combP(namAuto) # 0.4647446
+
+###
+eur <- mxl[,seq(from=79,to=145,by=3)]
+colnames(eur) # ok, good - chrs 1-22+X
+dim(eur) # 53 23
+
+calc_combP(eur) # 0.00115851
+
+eurAuto <- eur[,1:22]
+calc_combP(eurAuto) # 0.5999746
+# this is for EUR genome-wide
 
 
+## afr now
+afr <- mxl[,seq(from=80,to=147,by=3)]
+colnames(afr) # ok, good - chrs 1-22+X
+dim(afr)# 53 23
 
+calc_combP(afr) # 0.9145613
+
+afrAuto <- afr[,1:22]
+calc_combP(afrAuto) # 0.9077587
+# this is for AFR genome-wide
 

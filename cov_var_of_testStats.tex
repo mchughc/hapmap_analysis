@@ -1,0 +1,163 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+\usepackage{lscape,amsmath,amssymb}
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margins=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+\usepackage{multicol,multirow,array}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{Brief Article}
+\author{The Author}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\newcommand{\snpM}{\mbox{SNP}}
+\newcommand{\snpX}{\mbox{SNP}_x}
+\newcommand{\snpXM}{\mbox{SNP}_x^M}
+\newcommand{\snpXF}{\mbox{SNP}_x^F}
+
+
+\begin{document}
+
+Consider individual $i$ and subpopulation $k$ and let the estimated ancestry proportion of subpopulation $k$ in individual $i$ on chromosome $c$ to be denoted as $a_{ik}^c$.
+We assume that for all $c$ and $c'$, $w_{i,cc'}=w_i$, that is, that the covariance between ancestry at any two pairs of chromosomes within an individual is the same, regardless of which pair of chromosomes we are considering.
+Denote 
+\begin{align}
+cov(a_{ik}^c,a_{ik}^{c'})=w_{i,cc'}=w_i\\
+var(a_{ik}^c)=\sigma^2_{ik}\end{align}
+
+First, we find $cov(\sum_{m \notin\{c\}}a_{ik}^{m}, \sum_{m\notin \{c'\}}a_{ik}^{m})$.
+In a small example where $c=2$ and $c'=3$ with $m=4$ we see that 
+\begin{align}
+\sum_{m \notin\{c\}}a_{ik}^{m} = a_1+a_3+a_4  \\
+\sum_{m \notin\{c'\}}a_{ik}^{m} = a_1+a_2+a_3
+\end{align}
+Then it follows that
+\begin{align}
+cov(\sum_{m \notin\{c\}}a_{ik}^{m}, \sum_{m\notin \{c'\}}a_{ik}^{m}) &=cov(a_1+a_3+a_4, a_1+a_2+a_3)\\
+&=cov(a_1,a_1)+cov(a_1,a_2)+cov(a_1,a_3)\\
+&+cov(a_3,a_1)+cov(a_3,a_2)+cov(a_3,a_3)\\
+&+cov(a_4,a_1)+cov(a_4,a_2)+cov(a_4,a_3)\\
+&=2\sigma^2_{ik}+7w_{i}\\
+&=(m-2)\sigma^2_{ik}+(m-2)^2w_{i}+(m-1)w_{i} \label{sumsum}
+\end{align}
+We next find $cov(\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^{c'})$ under the same example where $c=2$, $c'=3$ and $m=4$
+\begin{align}
+cov(\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^{c'})&=cov(a_1+a_3+a_4,a_3)\\
+&=cov(a_1,a_3)+cov(a_3,a_3)+cov(a_4,a_3)\\
+&=2w_{i}+\sigma^2_{ik}\\
+&=(m-2)w_{i}+\sigma^2_{ik} \label{sumsing}
+\end{align}
+%We can also find $cov(\sum_{m \notin\{c\}}a_{ik}^{m},\sum_{m \notin\{c\}}a_{ik}^{m})=var(\sum_{m \notin\{c\}}a_{ik}^{m})$.
+%\begin{align}
+%cov(\sum_{m \notin\{c\}}a_{ik}^{m},\sum_{m \notin\{c\}}a_{ik}^{m}) &= cov(a_1+a_3+a_4,a_1+a_3+a_4)\\
+%&=cov(a_1,a_1)+cov(a_1,a_3)+cov(a_1,a_4)\\
+%&+cov(a_3,a_1)+cov(a_3,a_3)+cov(a_3,a_4)\\
+%&+cov(a_4,a_1)+cov(a_4,a_3)+cov(a_4,a_4)\\
+%&=3\sigma^2_{ik}+6w_{i,cc'}\\
+%&=(m-1)\sigma^2_{ik}+(m-1)(m-2)w_{i,cc'} \label{varsum}
+%\end{align}
+%Finally, we calculate $cov(\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^c)$ under the same example where $c=2$ and $m=4$
+%\begin{align}
+%cov(\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^c)&=cov(a_1+a_3+a_4,a_2)\\
+%&=cov(a_1,a_2)+cov(a_3,a_2)+cov(a_4,a_2)\\
+%&=3w_{i,cc'}\\
+%&=(m-1)w_{i,cc'}  \label{sumsingsame}
+%\end{align}
+
+Now we have all the components to find $cov(D_{ik}^c,D_{ik}^{c'})$.
+\begin{align}
+cov(D_{ik}^c,D_{ik}^{c'}) &= cov(a_{ik}^{-c}-a_{ik}^c,a_{ik}^{-c'}-a_{ik}^{c'})\\
+&= cov(a_{ik}^{-c},a_{ik}^{-c'})-cov(a_{ik}^{-c},a_{ik}^{c'})-cov(a_{ik}^c,a_{ik}^{-c'})+cov(a_{ik}^c,a_{ik}^{c'})\\
+&= cov(a_{ik}^{-c},a_{ik}^{-c'})-2cov(a_{ik}^{-c},a_{ik}^{c'})+cov(a_{ik}^c,a_{ik}^{c'})\\
+&= cov(\frac{1}{22}\sum_{m \notin\{c\}}a_{ik}^{m}, \frac{1}{22}\sum_{m\notin \{c'\}}a_{ik}^{m})-2cov(\frac{1}{22}\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^{c'})+w_{i}\\
+&=\Big( \frac{1}{22}\Big) ^2 cov(\sum_{m \notin\{c\}}a_{ik}^{m}, \sum_{m\notin \{c'\}}a_{ik}^{m})-\frac{2}{22}cov(\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^{c'})+w_{i}\\
+&=\Big( \frac{1}{22}\Big) ^2\{21(\sigma^2_{ik}+21w_{i})+22w_{i}\} -\frac{2}{22}\{21w_{i}+\sigma^2_{ik}\}+w_{i}\\
+&=\frac{1}{(m-1)^2}\{(m-2)\sigma^2_{ik}+(m-2)^2w_{i}+(m-1)w_{i}\} \\
+&-\frac{2}{(m-1)}\{(m-2)w_{i}+\sigma^2_{ik}\}+w_{i}
+\end{align}
+where the first two terms are as found in Equations~\ref{sumsum} and~\ref{sumsing}, respectively and $m=23$.
+With some simplification and algebra, this equation becomes 
+\begin{equation}
+cov(D_{ik}^c,D_{ik}^{c'})=\frac{m}{(m-1)^2}(w_{i}-\sigma^2_{ik})
+\end{equation}
+
+
+%Next, we find $var(D_{ik}^c)=cov(D_{ik}^c,D_{ik}^c)$.
+%\begin{align}
+%var(D_{ik}^c) &= cov(a_{ik}^{-c}-a_{ik}^c,a_{ik}^{-c}-a_{ik}^c)\\
+%&= cov(a_{ik}^{-c},a_{ik}^{-c})-2cov(a_{ik}^{-c},a_{ik}^c)+cov(a_{ik}^c,a_{ik}^c)\\
+%&= cov(\frac{1}{22}\sum_{m \notin\{c\}}a_{ik}^{m}, \frac{1}{22}\sum_{m\notin \{c\}}a_{ik}^{m})-2cov(\frac{1}{22}\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^c)+\sigma^2_{ik}\\
+%&=\frac{1}{22^2}cov(\sum_{m \notin\{c\}}a_{ik}^{m}, \sum_{m\notin \{c\}}a_{ik}^{m})-\frac{2}{22}cov(\sum_{m\notin \{c\}}a_{ik}^{m}, a_{ik}^c)+\sigma^2_{ik}\\
+%&=\frac{1}{22^2}\{(m-1)\sigma^2_{ik}+(m-1)(m-2)w_{i,cc'}\}-\frac{2}{22}(m-1)w_{i,cc'} +\sigma^2_{ik}\\
+%&=\frac{1}{(m-1)^2}\{(m-1)\sigma^2_{ik}+(m-1)(m-2)w_{i,cc'}\}-2w_{i,cc'} +\sigma^2_{ik}
+%\end{align}
+%where the first two terms come from Equations~\ref{varsum} and~\ref{sumsingsame}, respectively and $m=23$.
+%With some simplification and algebra, this equation becomes 
+%\begin{equation}
+%var(D_{ik}^c)=\frac{m}{(m-1)}(\sigma^2_{ik}-w_{i,cc'})
+%\end{equation}
+
+
+Now, we are able to combine these results to calculate the entries in the variance-covariance matrix for our test statistics $T_k^c$.
+\begin{align}
+cov(T_k^c,T_k^{c'})&=cov(\frac{\overline{D_k^c}}{\sigma_{ck}},\frac{\overline{D_k^{c'}}}{\sigma_{c'k}})\\
+&=\frac{1}{\sigma_{ck}\sigma_{c'k}}cov(\overline{D_k^c},\overline{D_k^{c'}})\\
+&=\frac{1}{n^2\sigma_{ck}\sigma_{c'k}}cov(D_{1k}^c+\dots+D_{nk}^c,D_{1k}^{c'}+\dots+D_{nk}^{c'})\\
+&=\frac{1}{n^2\sigma_{ck}\sigma_{c'k}} \sum_{i=1}^n \frac{m}{(m-1)^2}(w_{i}-\sigma_{i}^2)
+\end{align}
+The diagonal entries correspond to $var(T_k^c)=1$.
+
+\end{document}
+
+
+
+

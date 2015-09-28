@@ -1,0 +1,163 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+\documentclass[11pt, letterpaper]{article}
+\def\bm#1{\hbox{\boldmath  $#1$\unboldmath}{}}
+\setlength{\parindent}{0in}
+\setlength{\textheight}{8.9in}
+\setlength{\textwidth}{6.8in}
+\setlength{\oddsidemargin}{-0.3in}
+\setlength{\evensidemargin}{0.0in}
+\addtolength{\topmargin}{-1in}
+\setlength{\parskip}{0.1in}
+
+\usepackage{amsmath, amsfonts, color}
+\usepackage{graphicx}
+
+\renewcommand{\baselinestretch}{1.0}
+\begin{document}
+\def \v{\mbox{var}}
+\def \E{\mbox{E}}
+\def \c{\mbox{cov}}
+
+
+\newcommand{\bmX}{\mbox{\boldmath $X$}}
+%\newcommand{\hatb0}{\mbox{$\hat{\beta}_0$}}
+\newcommand{\bmY}{\mbox{\boldmath $Y$}}
+\newcommand{\bmy}{\mbox{\boldmath $y$}}
+\newcommand{\bmZ}{\mbox{\boldmath $Z$}}
+\newcommand{\bmz}{\mbox{\boldmath $z$}}
+\newcommand{\bmx}{\mbox{\boldmath $x$}}
+\newcommand{\bmQ}{\mbox{\boldmath $Q$}}
+\newcommand{\bmU}{\mbox{\boldmath $U$}}
+\newcommand{\bmu}{\mbox{\boldmath $u$}}
+\newcommand{\bmV}{\mbox{\boldmath $V$}}
+\newcommand{\bmI}{\mbox{\boldmath $I$}}
+\newcommand{\bmW}{\mbox{\boldmath $W$}}
+\newcommand{\bmD}{\mbox{\boldmath $D$}}
+\newcommand{\bms}{\mbox{\boldmath $s$}}
+\newcommand{\bma}{\mbox{\boldmath $a$}}
+\newcommand{\bmb}{\mbox{\boldmath $b$}}
+\newcommand{\bmq}{\mbox{\boldmath $q$}}
+\newcommand{\bmf}{\mbox{\boldmath $f$}}
+\newcommand{\bmA}{\mbox{\boldmath $A$}}
+%\newcommand{\bmepsilon}{\mbox{\boldmath $\epsilon$}}
+\newcommand{\Prob}{\mbox{Pr}}
+\newcommand{\bmone}{\mbox{\bf 1}}
+\newcommand{\bmzero}{\mbox{\bf 0}}
+\newcommand{\bmbeta}{\mbox{\boldmath $\beta$}}
+\newcommand{\bmdelta}{\mbox{\boldmath $\delta$}}
+\newcommand{\bmtheta}{\mbox{\boldmath $\theta$}}
+\newcommand{\bmpsi}{\mbox{\boldmath $\psi$}}
+\newcommand{\bmphi}{\mbox{\boldmath $\phi$}}
+\newcommand{\bmnu}{\mbox{\boldmath $\nu$}}
+\newcommand{\bmgamma}{\mbox{\boldmath $\gamma$}}
+\newcommand{\bmmu}{\mbox{\boldmath $\mu$}}
+\newcommand{\bmepsilon}{\mbox{\boldmath $\epsilon$}}
+\newcommand{\bmSigma}{\mbox{\boldmath $\Sigma$}}
+\newcommand{\bmsigma}{\mbox{\boldmath $\sigma$}}
+
+\newcommand{\mR}{\ensuremath{\pmb{\mathsf{R}}}}
+\newcommand{\mX}{\ensuremath{\pmb{\mathsf{X}}}}
+\newcommand{\mx}{\ensuremath{\pmb{\mathsf{x}}}}
+\newcommand{\mV}{\ensuremath{\pmb{\mathsf{V}}}}
+\newcommand{\mW}{\ensuremath{\pmb{\mathsf{W}}}}
+
+
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+$\alpha$ & pairedT & sign \\ 
+  \hline
+0.01 & 0.0118 & 0.0066 \\ 
+0.005 & 0.0053 & 0.0025\\
+  0.001 & 0.0004 & 0.0012 \\ 
+  1e-04 & 0.0000 & 0.0000 \\ 
+  \hline
+\end{tabular}
+\caption{\textbf{Type I error results.} Proportion of 5,000 tests that are rejected at a given $\alpha$ level (rows) for each of the proposed methods. These correspond to samples simulated under the null hypothesis, for which the random ancestry effect has the same mean and standard deviation for chromosomes 1 and 2.}
+\end{table}
+\vspace{3cm}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlrrrrr}
+  \hline
+$\alpha$& & sd\_0.01 & sd\_0.02 & sd\_0.03 & sd\_0.04 & sd\_0.05 \\ 
+  \hline
+0.001&pairedT & 0.0015 & 0.0010 & 0.0025 & 0.0040 & 0.0035 \\ 
+&sign & 0.0015 & 0.0000 & 0.0015 & 0.0005 & 0.0010 \\ \hline
+ 1e-4&pairedT & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0005 \\ 
+  &sign & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\caption{\textbf{Type I error results.} Proportion of 2,000 tests that are rejected at a given $\alpha$ level for each of the proposed methods. These correspond to simulated samples under the null hypothesis, for which the random ancestry effect has the same mean for chromosomes 1 and 2, but the standard deviation for chromosome 1 is 0.01, while the standard deviation for chromosome 2 is as listed in the column names.}
+\end{table}
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{r|rr|rr}
+  \hline
+&\multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.001$} \\
+ & pairedT & signT & pairedT & signT\\ 
+  \hline
+0.005 & 0.0260 & 0.0120 & 0.0020 & 0.0020 \\ 
+  0.01 & 0.0600 & 0.0400 & 0.0060 & 0.0020 \\ 
+  0.015 & 0.1960 & 0.0960 & 0.0480 & 0.0280 \\ 
+  0.02 & 0.3200 & 0.1560 & 0.1120 & 0.0560 \\ 
+  0.025 & 0.6460 & 0.4020 & 0.3500 & 0.1860 \\ 
+  0.03 & 0.8380 & 0.5900 & 0.6020 & 0.3160 \\ 
+  0.035 & 0.9660 & 0.7880 & 0.8280 & 0.5560 \\ 
+  0.04 & 0.9800 & 0.8740 & 0.9080 & 0.6540 \\ 
+  0.045 & 0.9980 & 0.9600 & 0.9780 & 0.8160 \\ 
+  0.05 & 1.0000 & 0.9840 & 0.9940 & 0.9140 \\ 
+  0.075 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.1 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.12 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.125 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.13 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.14 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.15 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.175 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.2 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.225 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+  0.25 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\ 
+   \hline
+\end{tabular}
+\caption{\textbf{Power results.} Proportion of 500 tests that are rejected at a given $\alpha$ level. The rows correspond to the mean of the random ancestry effect for chromosome 2, i.e. the simulated difference in means between chromosome 1 and 2. Figure~\ref{fig1} shows these results in a plot.}
+\label{tab1}
+\end{table}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=5in]{/Users/c8linmch/Dropbox/tim_stuff/batch_runs_propsLessThan01_001_truncUnif.pdf}
+\end{center}
+\caption{\textbf{Power results.} Plot of values presented in Table~\ref{tab1}.}
+\label{fig1}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr|rrrrr}
+  \hline
+ & alpha & sd\_01 & sd\_02 & sd\_03 & sd\_04 & sd\_05 \\ 
+  \hline
+ttest & 0.01 & 0.0095 & 0.0135 & 0.0155 & 0.0120 & 0.0135 \\ 
+ sign & 0.01 & 0.0085 & 0.0095 & 0.0103 & 0.0090 & 0.0100 \\ \hline
+ttest & 0.001 & 0.0000 & 0.0020 & 0.0013 & 0.0015 & 0.0020 \\ 
+sign & 0.001 & 0.0005 & 0.0020 & 0.0008 & 0.0010 & 0.0010 \\ \hline
+ttest & 0.005 & 0.0055 & 0.0065 & 0.0067 & 0.0065 & 0.0070 \\ 
+sign & 0.005 & 0.0040 & 0.0050 & 0.0030 & 0.0040 & 0.0030 \\ \hline
+ttest & 0.0001 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\ 
+sign & 0.0001 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+\end{document}
+
